@@ -15,7 +15,8 @@ GROQ_API_KEY = os.getenv('GROQ_API_KEY')
 
 if "store" not in st.session_state:
        st.session_state.store={}
-       
+if "key_valid" not in st.session_state:
+       st.session_state.key_valid=False       
 
 def get_session_id(session_id:str)->BaseChatMessageHistory:
     if session_id not in st.session_state.store:
@@ -57,19 +58,21 @@ api_key = st.sidebar.text_input("Enter the API key,use OPENAI API Key for OpenAI
 
 llm_name = st.sidebar.selectbox("Select your model",all_models)
 
-if api_key == GROQ_API_KEY:
+if (api_key == GROQ_API_KEY) and (llm_name in model_groq):
             llm = ChatGroq(model=llm_name)
             chain = prompt|llm
+            st.session_state.key_valid=True
 
-elif api_key == OPENAI_API_KEY:
+elif (api_key == OPENAI_API_KEY) and (llm_name in model_openai):
             llm = ChatOpenAI(model=llm_name)
             chain = prompt|llm
+            st.session_state.key_valid=True
 else:
      st.sidebar.write("Enter Valid API Key")
 
 text_input = st.text_input("Enter your question:")
 
-if text_input:
+if text_input and (st.session_state.key_valid == True):
     output = get_chat_response(chain,text_input)
     st.write(output)
 
