@@ -12,8 +12,6 @@ load_dotenv()
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 GROQ_API_KEY = os.getenv('GROQ_API_KEY')
-os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
-os.environ['LANGCHAIN_PROJECT'] = os.getenv('LANGCHAIN_PROJECT')
 
 if "store" not in st.session_state:
        st.session_state.store={}
